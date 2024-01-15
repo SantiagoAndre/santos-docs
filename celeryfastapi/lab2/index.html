@@ -1,0 +1,1703 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../lab1/">
+      
+      
+        <link rel="next" href="../lab3/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.3">
+    
+    
+      
+        <title>Lab 2: FastAPI and Celery Integration Documentation - Santos Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.50c56a3b.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#lab-2-fastapi-and-celery-integration-documentation" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Santos Docs" class="md-header__button md-logo" aria-label="Santos Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Santos Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Lab 2: FastAPI and Celery Integration Documentation
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Santos Docs" class="md-nav__button md-logo" aria-label="Santos Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Santos Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Labs Kubernetes
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Labs Kubernetes
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Minikube
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            Minikube
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../labs_kubernetes/minikube/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    1. Instalacion
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../labs_kubernetes/minikube/labs1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2. Load Balancer y una API Flask
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../labs_kubernetes/minikube/labs2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3. Compartir archivos entre  dos containers en un Pod
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../labs_kubernetes/minikube/labs3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    4. Ping desde entre dos containers de un mismo POD
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../labs_kubernetes/minikube/labs4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    5. Comunicacion de dos PODS con un service NodePort
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../labs_kubernetes/minikube/labs5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    6. Docker Coins en Kubernetes
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Azure Kubernetes Service
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Azure Kubernetes Service
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../labs_kubernetes/azure/labs1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    1. Azure Kubernetes Service
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Graphana
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            Graphana
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../labs_kubernetes/helm/graphana_prometheus/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Instalando graphana y prometheus en un  cluster
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Celery & Fast API Labs
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Celery & Fast API Labs
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../CeleryFastAPILabs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    FastAPI & Celery  Labs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Lab 1: FastAPI Integration with Celery and Redis
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Lab 2: FastAPI and Celery Integration Documentation
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Lab 2: FastAPI and Celery Integration Documentation
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      Table of Contents
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#designs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Designs:
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Designs:">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#user-perspective" class="md-nav__link">
+    <span class="md-ellipsis">
+      User perspective
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#developer-perspective" class="md-nav__link">
+    <span class="md-ellipsis">
+      Developer perspective
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#flow-diagram" class="md-nav__link">
+    <span class="md-ellipsis">
+      Flow diagram
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-project-structure-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Project Structure Overview
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Project Structure Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#directory-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Directory Structure:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#descriptions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Descriptions:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-docker-compose-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Docker Compose Configuration
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-web-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Web Service
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-redis-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Redis Service
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-celery-worker-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Celery Worker Service
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-flower-monitoring-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. Flower Monitoring Service
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-database-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      7. Database Service
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-setting-up-and-running" class="md-nav__link">
+    <span class="md-ellipsis">
+      8. Setting Up and Running
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-alembic-database-migrations" class="md-nav__link">
+    <span class="md-ellipsis">
+      9. Alembic: Database Migrations
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. Alembic: Database Migrations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      Introduction
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Setup
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generating-auto-migrations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Generating Auto-Migrations
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#applying-migrations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Applying Migrations
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Lab 3: Advanced User Management and Chatroom Module
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Lab 4: Real-Time Chat Application
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Lab 5:  WebSocket With Celery
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Google Maps Scrapper
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Google Maps Scrapper
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../GoogleMapsScrapper/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Google Maps Scraper
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Azure Certifications
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Azure Certifications
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_1" id="__nav_5_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    AZ 204
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_1">
+            <span class="md-nav__icon md-icon"></span>
+            AZ 204
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Azurecertifications/Az204/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Azure 204 Certification
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Azurecertifications/Az204/1.vms/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Virtual Machines
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cbir_project/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Microservices with Docker
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../haskell/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Lists In Haskell
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../versions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Versions a Git Clone
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      Table of Contents
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#designs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Designs:
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Designs:">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#user-perspective" class="md-nav__link">
+    <span class="md-ellipsis">
+      User perspective
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#developer-perspective" class="md-nav__link">
+    <span class="md-ellipsis">
+      Developer perspective
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#flow-diagram" class="md-nav__link">
+    <span class="md-ellipsis">
+      Flow diagram
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-project-structure-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Project Structure Overview
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Project Structure Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#directory-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Directory Structure:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#descriptions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Descriptions:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-docker-compose-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Docker Compose Configuration
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-web-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Web Service
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-redis-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Redis Service
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-celery-worker-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Celery Worker Service
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-flower-monitoring-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. Flower Monitoring Service
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-database-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      7. Database Service
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-setting-up-and-running" class="md-nav__link">
+    <span class="md-ellipsis">
+      8. Setting Up and Running
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-alembic-database-migrations" class="md-nav__link">
+    <span class="md-ellipsis">
+      9. Alembic: Database Migrations
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. Alembic: Database Migrations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      Introduction
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Setup
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generating-auto-migrations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Generating Auto-Migrations
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#applying-migrations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Applying Migrations
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="lab-2-fastapi-and-celery-integration-documentation">Lab 2: FastAPI and Celery Integration Documentation<a class="headerlink" href="#lab-2-fastapi-and-celery-integration-documentation" title="Permanent link">&para;</a></h1>
+<p>This documentation covers the integration of FastAPI with Celery, alongside tools like SQLAlchemy for database operations and Alembic for migration handling.</p>
+<h2 id="table-of-contents">Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>Project Structure</strong></li>
+<li><strong>Docker Compose Configuration</strong></li>
+<li><strong>Web Service</strong></li>
+<li><strong>Redis Service</strong></li>
+<li><strong>Celery Worker Service</strong></li>
+<li><strong>Flower Monitoring Service</strong></li>
+<li><strong>Database Service</strong></li>
+<li><strong>Setting Up and Running</strong></li>
+</ol>
+<hr />
+<p>Certainly! Here&rsquo;s a dedicated section that explains the new structure of your project.</p>
+<hr />
+<h2 id="designs">Designs:<a class="headerlink" href="#designs" title="Permanent link">&para;</a></h2>
+<h3 id="user-perspective">User perspective<a class="headerlink" href="#user-perspective" title="Permanent link">&para;</a></h3>
+<p><img alt="c4 model" src="../../img/celery/lab2/context.png" /></p>
+<h3 id="developer-perspective">Developer perspective<a class="headerlink" href="#developer-perspective" title="Permanent link">&para;</a></h3>
+<p><img alt="c4 model" src="../../img/celery/lab2/context-developer.png" /></p>
+<h2 id="flow-diagram">Flow diagram<a class="headerlink" href="#flow-diagram" title="Permanent link">&para;</a></h2>
+<p>This app provides a simple api to manage users, when a new user is created, a new task to send registration email is added to celery queue</p>
+<p><img alt="c4 model" src="../../img/celery/lab2/flow.png" /></p>
+<h2 id="1-project-structure-overview">1. Project Structure Overview<a class="headerlink" href="#1-project-structure-overview" title="Permanent link">&para;</a></h2>
+<p>In this laboratory exercise, we&rsquo;ve introduced a more framework-centric structure that promotes modular design, scalability, and ease of maintenance. Let&rsquo;s break down the different components:</p>
+<h3 id="directory-structure">Directory Structure:<a class="headerlink" href="#directory-structure" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>.
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── alembic/
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├── project/
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>│   ├── database.py
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>│   ├── celery_utils.py
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>│   ├── users/
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>│   └── config.py
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>├── scripts/
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>├── .env.dev
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>├── Dockerfile.dev
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>├── docker-compose.yaml
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>|   alembic.ini
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>├── main.py
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>└── requirements.txt
+</code></pre></div>
+<h3 id="descriptions">Descriptions:<a class="headerlink" href="#descriptions" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>alembic/</strong>: </li>
+<li>
+<p>This directory is dedicated to Alembic, our database migration tool. It contains migration scripts, configurations, and version history. This helps in maintaining a versioned history of our database schema changes.</p>
+</li>
+<li>
+<p><strong>project/</strong>:</p>
+</li>
+<li><strong>database.py</strong>: This module sets up and configures our database connection and session using SQLAlchemy.</li>
+<li><strong>celery_utils.py</strong>: Utility for setting up and configuring the Celery instance for background task processing.</li>
+<li><strong>users/</strong>: A module-based directory focusing on user-related operations. This promotes modular design where each module (like users) can have its own models, views, and controllers.<ul>
+<li><strong>schemas.py</strong>: Pydantic schemas for user-related requests and responses.</li>
+<li><strong>tasks.py</strong>: Celery tasks related to the users module.</li>
+<li><strong>crud.py</strong>: CRUD operations for the user model.</li>
+<li><strong>models.py</strong>: SQLAlchemy models for users.</li>
+</ul>
+</li>
+<li>
+<p><strong>config.py</strong>: Configuration settings for the project, making use of environment variables or default values.</p>
+</li>
+<li>
+<p><strong>scripts/</strong>:</p>
+</li>
+<li>
+<p>Contains shell scripts which might be useful for bootstrapping, deployment, or task automation. For instance, <code>start_flower.sh</code> is present to bootstrap the Flower monitor for Celery.</p>
+</li>
+<li>
+<p><strong>.env.dev</strong>:</p>
+</li>
+<li>
+<p>Environment-specific (development in this case) variables are stored here. They are used by Docker and can also be read within the application to configure certain settings.</p>
+</li>
+<li>
+<p><strong>Dockerfile.dev</strong>:</p>
+</li>
+<li>
+<p>The Docker configuration file for creating a development environment container for our application.</p>
+</li>
+<li>
+<p><strong>docker-compose.yaml</strong>:</p>
+</li>
+<li>
+<p>Docker Compose configuration that helps in defining and running multi-container Docker applications. This is where services like the web application, database, Celery worker, and others are defined.</p>
+</li>
+<li>
+<p><strong>main.py</strong>:</p>
+</li>
+<li>The entry point to our FastAPI application. This is where the application instance is created and routes are included.</li>
+</ol>
+<hr />
+<h2 id="2-docker-compose-configuration">2. Docker Compose Configuration<a class="headerlink" href="#2-docker-compose-configuration" title="Permanent link">&para;</a></h2>
+<p>The <code>docker-compose.yaml</code> file contains definitions for various services:</p>
+<ul>
+<li><strong>web</strong>: The main FastAPI application.</li>
+<li><strong>redis</strong>: The Redis broker for Celery.</li>
+<li><strong>celery_worker</strong>: The Celery worker service.</li>
+<li><strong>flower</strong>: A monitoring tool for Celery.</li>
+<li><strong>db</strong>: PostgreSQL database service.</li>
+</ul>
+<hr />
+<h2 id="3-web-service">3. Web Service<a class="headerlink" href="#3-web-service" title="Permanent link">&para;</a></h2>
+<p>The web service runs the FastAPI application:</p>
+<ul>
+<li>Uses the <code>Dockerfile.dev</code> for building the Docker image.</li>
+<li>Sets the command to run FastAPI with <code>uvicorn</code>.</li>
+<li>Maps port <code>8010</code> on the host to port <code>8000</code> on the container.</li>
+<li>Depends on the <code>redis</code> and <code>db</code> services.</li>
+</ul>
+<hr />
+<h2 id="4-redis-service">4. Redis Service<a class="headerlink" href="#4-redis-service" title="Permanent link">&para;</a></h2>
+<p>Redis is used as the message broker for Celery:</p>
+<ul>
+<li>Uses the official Redis image (<code>redis:7-alpine</code>).</li>
+</ul>
+<hr />
+<h2 id="5-celery-worker-service">5. Celery Worker Service<a class="headerlink" href="#5-celery-worker-service" title="Permanent link">&para;</a></h2>
+<p>This service processes tasks asynchronously:</p>
+<ul>
+<li>Uses the same Docker image as the web service.</li>
+<li>Runs the Celery worker with the appropriate configurations.</li>
+<li>Depends on the <code>redis</code> service for task management.</li>
+</ul>
+<hr />
+<h2 id="6-flower-monitoring-service">6. Flower Monitoring Service<a class="headerlink" href="#6-flower-monitoring-service" title="Permanent link">&para;</a></h2>
+<p>Flower is used to monitor and manage Celery tasks:</p>
+<ul>
+<li>Uses the same Docker image as the web service.</li>
+<li>Runs a shell script to initiate Flower.</li>
+<li>Maps port <code>5550</code> on the host to <code>5555</code> on the container.</li>
+<li>Depends on the <code>redis</code> service.</li>
+</ul>
+<hr />
+<h2 id="7-database-service">7. Database Service<a class="headerlink" href="#7-database-service" title="Permanent link">&para;</a></h2>
+<p>The database service uses PostgreSQL:</p>
+<ul>
+<li>Utilizes the <code>postgres:12</code> Docker image.</li>
+<li>Stores data in a Docker volume named <code>postgres_data</code> to persist data.</li>
+<li>Sets up the database with provided environment variables (username, password, dbname).</li>
+</ul>
+<hr />
+<h2 id="8-setting-up-and-running">8. Setting Up and Running<a class="headerlink" href="#8-setting-up-and-running" title="Permanent link">&para;</a></h2>
+<p>To get the project up and running:</p>
+<ol>
+<li>Install Docker and Docker Compose.</li>
+<li>Navigate to the project directory.</li>
+<li>Run <code>docker-compose up -d</code> to start all services in detached mode.</li>
+<li>Access the FastAPI application at <code>http://localhost:8010</code>.</li>
+<li>Monitor Celery tasks using Flower at <code>http://localhost:5550</code>.</li>
+</ol>
+<h2 id="9-alembic-database-migrations">9. Alembic: Database Migrations<a class="headerlink" href="#9-alembic-database-migrations" title="Permanent link">&para;</a></h2>
+<h3 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h3>
+<p><a href="https://alembic.sqlalchemy.org/en/latest/">Alembic</a> is a lightweight database migration tool for usage with the SQLAlchemy database toolkit. It provides a way to programmatically manage changes in your database schema, ensuring that your database schema is in sync with your SQLAlchemy models. By using migrations, you can maintain a history of changes, which can be very helpful for things like data integrity, database versioning, and collaborative development.</p>
+<h3 id="setup">Setup<a class="headerlink" href="#setup" title="Permanent link">&para;</a></h3>
+<p>Your project already includes an <code>alembic/</code> directory, which contains configuration, migration scripts, and version history. The primary configuration is in <code>alembic.ini</code>, which references <code>alembic/env.py</code> to determine the database connection, dependencies, and more.</p>
+<h3 id="generating-auto-migrations">Generating Auto-Migrations<a class="headerlink" href="#generating-auto-migrations" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<p><strong>Auto-generate Migration Script:</strong><br />
+After modifying your SQLAlchemy models, you can auto-generate migration scripts by running:<br />
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>alembic<span class="w"> </span>revision<span class="w"> </span>--autogenerate<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Description of the changes&quot;</span>
+</code></pre></div>
+For example, if you added a new column to a user model, you might run:<br />
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>alembic<span class="w"> </span>revision<span class="w"> </span>--autogenerate<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Added age column to user model&quot;</span>
+</code></pre></div>
+This command will detect changes in your models and generate a new migration script under <code>alembic/versions/</code>.</p>
+</li>
+<li>
+<p><strong>Review the Migration Script:</strong><br />
+It&rsquo;s a good practice to review the generated migration script to ensure it captures all the changes and to make any necessary tweaks.</p>
+</li>
+</ol>
+<h3 id="applying-migrations">Applying Migrations<a class="headerlink" href="#applying-migrations" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<p><strong>Upgrading to the Latest Migration:</strong><br />
+To apply the migrations and update the database schema, run:<br />
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>alembic<span class="w"> </span>upgrade<span class="w"> </span>head
+</code></pre></div>
+This command will apply all pending migrations up to the latest version.</p>
+</li>
+<li>
+<p><strong>Downgrading Migrations:</strong><br />
+If you need to undo a migration, you can downgrade. For example, to undo the last migration, you can run:<br />
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>alembic<span class="w"> </span>downgrade<span class="w"> </span>-1
+</code></pre></div>
+To downgrade to a specific migration version, replace <code>-1</code> with the version number (found in the filename of the migration script).</p>
+</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.annotate"], "search": "../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7c377c4.min.js"></script>
+      
+    
+  </body>
+</html>
